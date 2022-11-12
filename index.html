@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+  </head>
+    <title>Hello, Snaps!</title>
+    <link rel="icon" type="image/svg" href="./images/icon.svg"/>
+  </head>
+
+  <body>
+    <h1>Hello, Snaps!</h1>
+    <details>
+      <summary>Instructions</summary>
+      <ul>
+        <li>First, click "Connect". Then, try out the other buttons!</li>
+        <li>Please note that:</li>
+        <ul>
+          <li>
+            The <code>snap.manifest.json</code> and <code>package.json</code> must be located in the server root directory...
+          </li>
+          <li>
+            The Snap bundle must be hosted at the location specified by the <code>location</code> field of <code>snap.manifest.json</code>.
+          </li>
+        </ul>
+      </ul>
+    </details>
+    <br/>
+
+    <button class="connect">Connect</button>
+    <button class="sendHello">Send Hello</button>
+    <button class="signTransaction">Sign Transaction</button>
+    <button class="getPublicKey">Get Public Key</button>
+  </body>
+
+  <script>
+    const snapId = `local:${window.location.href}`;
+
+    const connectButton = document.querySelector('button.connect')
+    const sendButton = document.querySelector('button.sendHello')
+    const signButton = document.querySelector('button.signTransaction')
+    const getPublicKeyButton = document.querySelector('button.getPublicKey')
+
+    connectButton.addEventListener('click', connect)
+    sendButton.addEventListener('click', send)
+    signButton.addEventListener('click', sign)
+    getPublicKeyButton.addEventListener('click', getPublicKey)
+
+    async function getPublicKey(){
+      try {
+        let response = await ethereum.request({
+          method: 'wallet_invokeSnap',
+          params: [snapId, {
+            method: 'getPublicKey',
+          }]
+        })
+        console.log(response)
+      } catch (err) {
+        console.error(err)
+        alert('Problem happened: lol ' + err.message || err)
+      }
+    }
+
+    // here we get permissions to interact with and install the snap
+    async function connect () {
+      console.log("connect btn clicked..");
+      const res = await ethereum.request({
+        method: 'wallet_enable',
+        params: [{
+          wallet_snap: { [snapId]: {} },
+        }]
+      })
+      console.log("Connect fn ends..", res);
+    }
+
+    // here we call the snap's "hello" method
+    async function send () {
+      try {
+        let response = await ethereum.request({
+          method: 'wallet_enable',
+          params: [snapId, {
+            method: 'sendTransaction'
+          }]
+        })
+        console.log(response)
+
+      } catch (err) {
+        console.error(err)
+        alert('Problem happened: ' + err.message || err)
+      }
+    }
+
+    async function sign () {
+      try {
+        let response = await ethereum.request({
+          method: 'wallet_invokeSnap',
+          params: [snapId, {
+            method: 'signTransaction',
+          }]
+        })
+        console.log(response)
+      } catch (err) {
+        console.error(err)
+        alert('Problem happened: ' + err.message || err)
+      }
+    }
+  </script>
+</html>

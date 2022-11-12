@@ -1,0 +1,30 @@
+{
+  "name": "snapsoltrial2",
+  "version": "0.0.9",
+  "description": "Allows you to create a Solana Wallet using Metamasks",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/bundle.js",
+    "snap.manifest.json",
+    "images/icon.svg"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf build && mm-snap build && mm-snap serve",
+    "start": "mm-snap serve",
+    "clean": "rm -rf build"
+  },
+  "keywords": [
+    "solana",
+    "metamask",
+    "snap"
+  ],
+  "author": "Mohit Thakkar",
+  "license": "ISC",
+  "dependencies": {
+    "@metamask/key-tree": "^4.0.0",
+    "@metamask/snaps-cli": "^0.23.0",
+    "@solana/web3.js": "^1.56.2"
+  }
+}
